@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blush AR • Filtro de Maquiagem em Tempo Real</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================== TELA DE CARREGAMENTO / PERMISSÃO ===================== -->
+  <div id="permissionScreen" class="permission-screen">
+    <div class="permission-card">
+      <div class="permission-icon">🌸</div>
+      <h1>Blush AR</h1>
+      <p>Precisamos da sua câmera para aplicar o blush em tempo real no seu rosto.</p>
+      <button id="btnRequestCamera" class="btn btn-primary">Permitir acesso à câmera</button>
+      <p id="permissionStatus" class="permission-status"></p>
+    </div>
+  </div>
+
+  <!-- ===================== APP PRINCIPAL ===================== -->
+  <div id="app" class="app hidden">
+
+    <!-- Cabeçalho -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon">🌸</span>
+        <span class="brand-name">Blush<strong>AR</strong></span>
+      </div>
+
+      <div class="camera-select-wrap">
+        <label for="cameraSelect" class="camera-label">📷 Câmera</label>
+        <select id="cameraSelect" class="camera-select"></select>
+      </div>
+
+      <div class="topbar-actions">
+        <span id="faceStatus" class="face-status"></span>
+        <span id="fpsCounter" class="fps-badge">-- FPS</span>
+        <button id="btnDarkMode" class="icon-btn" title="Alternar modo escuro">🌙</button>
+      </div>
+    </header>
+
+    <!-- Corpo: preview + painel lateral -->
+    <main class="main-layout">
+
+      <!-- Preview da câmera -->
+      <section class="preview-wrap" id="previewWrap">
+        <div class="preview-frame" id="previewFrame">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="overlayCanvas"></canvas>
+          <div id="loadingModel" class="loading-model">
+            <div class="spinner"></div>
+            <span>Carregando modelo de detecção facial…</span>
+          </div>
+          <div class="preview-toolbar">
+            <button id="btnMirror" class="icon-btn" title="Espelhar câmera">↔️</button>
+            <button id="btnFullscreen" class="icon-btn" title="Tela cheia">⛶</button>
+            <button id="btnLandmarks" class="icon-btn" title="Mostrar pontos do rosto">🔵</button>
+          </div>
+        </div>
+
+        <div class="capture-bar">
+          <button id="btnCapture" class="btn btn-capture">📸 Tirar Foto</button>
+          <button id="btnReset" class="btn btn-ghost">↺ Restaurar padrões</button>
+        </div>
+      </section>
+
+      <!-- Painel lateral de controles -->
+      <aside class="control-panel">
+
+        <div class="panel-section">
+          <h2>Cor do Blush</h2>
+          <div id="colorPalette" class="color-palette">
+            <!-- gerado via JS -->
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Intensidade</h2>
+          <div class="slider-row">
+            <input type="range" id="sliderIntensity" min="0" max="100" value="55" />
+            <span id="valueIntensity" class="slider-value">55%</span>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Tamanho</h2>
+          <div class="slider-row">
+            <input type="range" id="sliderSize" min="50" max="180" value="100" />
+            <span id="valueSize" class="slider-value">100%</span>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Desfoque</h2>
+          <div class="slider-row">
+            <input type="range" id="sliderBlur" min="0" max="40" value="16" />
+            <span id="valueBlur" class="slider-value">16px</span>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Formato</h2>
+          <div id="shapeOptions" class="shape-options">
+            <button class="shape-btn active" data-shape="natural">Natural</button>
+            <button class="shape-btn" data-shape="oval">Oval</button>
+            <button class="shape-btn" data-shape="coreano">Coreano</button>
+            <button class="shape-btn" data-shape="circular">Circular</button>
+            <button class="shape-btn" data-shape="alongado">Alongado</button>
+          </div>
+        </div>
+
+        <div class="panel-section toggle-row">
+          <h2>Simetria</h2>
+          <label class="switch">
+            <input type="checkbox" id="toggleSymmetry" checked />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+      </aside>
+    </main>
+  </div>
+
+  <!-- Canvas oculto usado apenas para compor a foto final -->
+  <canvas id="captureCanvas" class="hidden"></canvas>
+
+  <!-- MediaPipe Face Landmarker (ES Module via CDN) + lógica do app -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
