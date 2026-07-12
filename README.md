@@ -1,146 +1,246 @@
 # 🌸 Blush AR — Filtro de Maquiagem em Tempo Real
 
-Filtro de realidade aumentada que aplica **blush realista** no rosto do usuário em tempo real, usando apenas tecnologias web (HTML, CSS, JavaScript) e o modelo **MediaPipe Face Landmarker** do Google para rastreamento facial de 468 pontos.
+Filtro de realidade aumentada que aplica **blush realista** no rosto do usuário em tempo real, utilizando apenas tecnologias web (HTML, CSS e JavaScript) e o modelo **MediaPipe Face Landmarker** do Google para rastreamento facial de 468 pontos.
+
+🚀 **Demonstração online:** https://blushfiltro.web.app
+
+> O projeto está hospedado no **Firebase Hosting**, permitindo acesso por meio de um domínio público, sem necessidade de instalação ou configuração por parte do usuário.
 
 Funciona com webcam integrada, **Iriun Webcam**, DroidCam, OBS Virtual Camera ou qualquer câmera reconhecida pelo navegador.
 
 ---
 
-## ✨ Descrição
+# ✨ Descrição
 
-O app detecta o rosto pela webcam e desenha um blush com gradiente radial, transparência e desfoque sobre as bochechas, acompanhando rotação, inclinação e distância da cabeça em tempo real (30–60 FPS). A interface tem paleta de 8 cores, controles de intensidade/tamanho/desfoque, 5 formatos de blush, alternância de simetria, visualização dos landmarks, captura de foto, tela cheia, espelhamento e modo escuro.
+O **Blush AR** é uma aplicação web de realidade aumentada que detecta o rosto do usuário pela webcam e aplica um efeito de blush de forma natural sobre as bochechas, acompanhando os movimentos da cabeça em tempo real.
+
+O blush é desenhado utilizando gradientes, transparência, desfoque e modos de mesclagem da Canvas API, proporcionando um efeito semelhante ao de uma maquiagem real.
+
+A interface oferece:
+
+- 🎨 8 cores de blush;
+- 💖 Controle de intensidade;
+- 📏 Ajuste de tamanho;
+- 🌫️ Controle de desfoque;
+- 😊 5 formatos diferentes de blush;
+- ⚖️ Modo simétrico ou individual;
+- 📍 Visualização dos pontos faciais (landmarks);
+- 📸 Captura de foto;
+- 🪞 Espelhamento da câmera;
+- 🌙 Modo escuro;
+- 📺 Tela cheia.
 
 ---
 
-## 📦 Estrutura do projeto
+# 🌐 Acesso Online
 
-```
+A aplicação encontra-se publicada no **Firebase Hosting**, permitindo acesso direto pelo navegador através de um domínio público.
+
+### Link da aplicação
+
+👉 https://blushfiltro.web.app
+
+Por utilizar HTTPS, o navegador permite acesso seguro à webcam, dispensando configurações adicionais para utilização da aplicação.
+
+---
+
+# 📦 Estrutura do projeto
+
+```text
 projeto-blush/
-├── index.html      # estrutura da interface
-├── style.css        # visual (tema claro + modo escuro)
-├── script.js         # câmera, detecção facial e renderização do blush
+├── index.html          # Estrutura da interface
+├── style.css           # Estilos da aplicação
+├── script.js           # Câmera, rastreamento facial e renderização do blush
 ├── assets/
-│   ├── blush/        # (reservado para texturas/PNGs extras, se desejar)
-│   └── icons/         # (reservado para ícones customizados, se desejar)
+│   ├── blush/          # Reservado para texturas ou imagens
+│   └── icons/          # Reservado para ícones personalizados
 └── README.md
 ```
 
-> O projeto não usa nenhum arquivo de imagem local por padrão — o blush é 100% desenhado via Canvas API (gradientes), então funciona sem precisar adicionar nada nas pastas `assets/`. Elas ficam disponíveis caso você queira trocar os emojis da paleta por ícones próprios.
+O projeto não utiliza imagens para desenhar o blush. Todo o efeito é gerado dinamicamente através da **Canvas API**, utilizando gradientes radiais, transparência e efeitos de blur.
 
 ---
 
-## 🧰 Requisitos
+# 🧰 Requisitos
 
-- Um navegador moderno com suporte a **WebGL, WebAssembly e getUserMedia**: Google Chrome ou Microsoft Edge (recomendados), versões recentes.
-- Uma webcam (física ou virtual).
-- Conexão com a internet **na primeira execução**, pois o modelo do MediaPipe (`face_landmarker.task`, ~ alguns MB) e as bibliotecas são carregados via CDN. Depois de carregado uma vez, o navegador costuma manter em cache.
-- Para usar câmeras virtuais (Iriun, DroidCam, OBS), o software correspondente precisa estar instalado e rodando **antes** de abrir a página.
+- Google Chrome ou Microsoft Edge (versões recentes);
+- Webcam física ou virtual;
+- Conexão com a internet na primeira execução para baixar o modelo do MediaPipe;
+- Para câmeras virtuais (Iriun, DroidCam ou OBS), o software correspondente deve estar instalado e em execução.
 
 ---
 
-## ▶️ Instalação e como executar
+# ▶️ Como utilizar
 
-Este projeto **não precisa de build nem de `npm install`** — é HTML/CSS/JS puro. Porém, por causa de duas restrições de segurança do navegador (módulos ES e acesso à câmera), **não abra o `index.html` diretamente com duplo clique** (`file://...`). Sirva a pasta por um servidor local simples:
+## Opção 1 — Utilizar a versão online (Recomendado)
 
-### Opção 1 — Python (já vem em muitos sistemas)
+Basta acessar:
+
+```
+https://SEU-DOMINIO
+```
+
+Permita o acesso à câmera quando solicitado e utilize normalmente.
+
+Não é necessário instalar nenhuma dependência.
+
+---
+
+## Opção 2 — Executar localmente (Desenvolvimento)
+
+Caso deseje modificar o projeto ou estudar seu funcionamento, execute-o localmente.
+
+**Importante:** não abra o arquivo `index.html` diretamente pelo navegador (`file://`), pois módulos JavaScript e acesso à câmera são bloqueados por questões de segurança.
+
+### Python
+
 ```bash
 cd projeto-blush
 python -m http.server 8000
 ```
-Depois abra: `http://localhost:8000`
 
-### Opção 2 — Node.js
+Abra:
+
+```
+http://localhost:8000
+```
+
+---
+
+### Node.js
+
 ```bash
 cd projeto-blush
 npx serve .
 ```
-Depois abra o endereço mostrado no terminal (geralmente `http://localhost:3000`).
 
-### Opção 3 — Extensão do editor
-Se você usa VS Code, a extensão **Live Server** também funciona perfeitamente (botão "Go Live").
-
-> `localhost` é tratado pelo navegador como "origem segura", então a câmera funciona normalmente mesmo sem HTTPS.
+Abra o endereço informado no terminal.
 
 ---
 
-## 🖥️ Como funciona
+### VS Code
 
-1. Ao abrir a página, você verá uma tela pedindo permissão de câmera.
-2. Ao clicar em **"Permitir acesso à câmera"**, o navegador pede a permissão nativa — aceite.
-3. O app lista todas as câmeras disponíveis no seletor do topo.
-4. Se uma câmera com "Iriun" no nome for encontrada, ela é **selecionada automaticamente**; caso contrário, é usada a primeira câmera da lista (geralmente a webcam integrada).
-5. O modelo de detecção facial é carregado (spinner "Carregando modelo…").
-6. Assim que o rosto é detectado, o blush aparece sobre as bochechas e acompanha os movimentos da cabeça em tempo real.
-7. Use o painel lateral para ajustar cor, intensidade, tamanho, desfoque, formato e simetria.
-8. Use a barra de ferramentas sobre o preview para espelhar a câmera, entrar em tela cheia ou visualizar os pontos do rosto (landmarks).
-9. Clique em **"📸 Tirar Foto"** para salvar uma imagem PNG com o blush aplicado.
+Também é possível utilizar a extensão **Live Server**.
 
 ---
 
-## 🔄 Como trocar de webcam
+# 🖥️ Como funciona
 
-Use o seletor **"📷 Câmera"** no topo da página — ele lista todos os dispositivos de vídeo autorizados pelo navegador. Ao escolher outra opção, o stream atual é encerrado e o novo é iniciado automaticamente, sem precisar recarregar a página.
-
----
-
-## 📱 Como usar a Iriun Webcam
-
-1. Instale o **Iriun Webcam** no computador (app desktop) e no celular (app Android/iOS).
-2. Conecte o celular e o computador na mesma rede Wi-Fi (ou use USB, conforme o app permitir).
-3. Abra o Iriun Webcam no celular e no computador — eles devem se conectar automaticamente.
-4. Abra o **Blush AR** (via `localhost`, conforme instruções acima).
-5. Ao permitir o acesso à câmera, o app detecta a "Iriun Webcam" na lista de dispositivos e a seleciona automaticamente. Se isso não acontecer, selecione-a manualmente no seletor de câmera.
-
-O mesmo processo vale para **DroidCam** e **OBS Virtual Camera** — o app tenta detectá-las automaticamente pelo nome do dispositivo, e elas também aparecem no seletor manual.
+1. O usuário acessa a aplicação pelo domínio público ou por um servidor local.
+2. A aplicação solicita permissão para acessar a câmera.
+3. Todas as webcams disponíveis são listadas automaticamente.
+4. Caso exista uma **Iriun Webcam**, ela será selecionada automaticamente.
+5. O modelo **MediaPipe Face Landmarker** é carregado.
+6. O rosto é detectado utilizando 468 pontos faciais.
+7. O blush é desenhado dinamicamente sobre as bochechas.
+8. Conforme o usuário movimenta a cabeça, o blush acompanha a posição em tempo real.
+9. Os controles laterais permitem alterar cor, intensidade, tamanho, formato e desfoque.
+10. O usuário pode capturar uma fotografia já contendo o efeito aplicado.
 
 ---
 
-## 🛠️ Solução de problemas
+# 🔄 Como trocar de webcam
 
-**A câmera não aparece / erro de permissão**
-- Verifique se o navegador tem permissão de câmera para o site (ícone de cadeado/câmera na barra de endereço).
-- Confirme que nenhum outro aplicativo está usando a câmera exclusivamente.
-- No Windows, verifique em Configurações → Privacidade → Câmera se o navegador tem acesso liberado.
+Utilize o seletor **📷 Câmera**, localizado na parte superior da aplicação.
 
-**A página trava em "Carregando modelo de detecção facial…"**
-- Verifique sua conexão com a internet (o modelo é baixado via CDN na primeira vez).
-- Confira o console do navegador (F12) para mensagens de erro de rede/CORS.
-- Tente recarregar a página; o navegador tende a cachear o modelo após o primeiro carregamento.
+Ao selecionar outro dispositivo:
 
-**A tela fica preta ao abrir `index.html` direto do arquivo**
-- Isso é esperado: abra o projeto por um servidor local (veja a seção *Como executar*), pois `file://` bloqueia módulos ES e, em alguns navegadores, a própria câmera.
-
-**A Iriun Webcam não é detectada automaticamente**
-- Confirme que o app Iriun está aberto e conectado antes de abrir o navegador.
-- Selecione manualmente "Iriun Webcam" no seletor de câmera no topo da página.
-
-**O blush não acompanha bem o rosto ou "treme"**
-- Melhore a iluminação do ambiente — o rastreamento facial depende de boa visibilidade do rosto.
-- Evite ficar muito longe da câmera ou com o rosto parcialmente fora do quadro.
-
-**FPS baixo**
-- Feche outras abas/aplicativos pesados.
-- Se disponível, use um navegador com aceleração de hardware (GPU) ativada (chrome://gpu para conferir no Chrome).
+- a câmera atual é encerrada;
+- a nova câmera é iniciada automaticamente;
+- não é necessário atualizar a página.
 
 ---
 
-## 🧩 Tecnologias utilizadas
+# 📱 Como utilizar a Iriun Webcam
 
-- **HTML5** — estrutura semântica da interface.
-- **CSS3** — layout responsivo, tema claro/escuro, animações e efeitos visuais.
-- **JavaScript ES6+** (módulos, `async`/`await`, classes) — toda a lógica da aplicação.
-- **[MediaPipe Face Landmarker](https://developers.google.com/mediapipe/solutions/vision/face_landmarker)** (`@mediapipe/tasks-vision`) — detecção facial de 468 pontos em tempo real, rodando no navegador via WebAssembly/WebGL.
-- **Canvas API** — desenho do blush com gradientes radiais, transparência, blur e modos de mesclagem (`multiply`/`screen`) para um resultado realista, além da composição da foto final.
-- **MediaDevices API** (`getUserMedia`, `enumerateDevices`) — acesso e seleção de câmeras físicas e virtuais (Iriun, DroidCam, OBS).
+1. Instale o **Iriun Webcam** no computador.
+2. Instale o aplicativo no celular.
+3. Conecte ambos na mesma rede Wi-Fi (ou via USB).
+4. Abra o aplicativo no computador e no celular.
+5. Acesse o Blush AR.
+6. Permita o acesso à câmera.
+7. Caso detectada, a Iriun Webcam será selecionada automaticamente.
 
-Nenhum framework (React/Vue/Angular) foi utilizado — o projeto é 100% JavaScript puro (*vanilla*).
+O mesmo comportamento ocorre com:
+
+- DroidCam
+- OBS Virtual Camera
 
 ---
 
-## 🎨 Paleta de cores disponível
+# 🛠️ Solução de problemas
 
-| Emoji | Nome |
-|---|---|
+## A câmera não aparece
+
+- Verifique as permissões da câmera no navegador;
+- Feche outros aplicativos que estejam utilizando a webcam;
+- No Windows, confirme que o navegador possui acesso à câmera nas configurações de privacidade.
+
+---
+
+## O modelo não carrega
+
+Verifique:
+
+- conexão com a internet;
+- bloqueios por firewall;
+- mensagens de erro no Console (F12).
+
+---
+
+## A tela fica preta
+
+Não abra o arquivo diretamente (`file://`).
+
+Utilize:
+
+- Firebase Hosting;
+- Live Server;
+- Python;
+- Node.js.
+
+---
+
+## A Iriun Webcam não aparece
+
+- Confirme que o aplicativo está aberto;
+- Reinicie a página;
+- Selecione manualmente a câmera.
+
+---
+
+## O blush treme
+
+Melhore a iluminação do ambiente e mantenha o rosto totalmente visível para a câmera.
+
+---
+
+## FPS baixo
+
+- Feche outras aplicações;
+- Utilize aceleração por hardware no navegador;
+- Evite executar aplicações pesadas simultaneamente.
+
+---
+
+# 🧩 Tecnologias utilizadas
+
+- **HTML5** — Estrutura da interface.
+- **CSS3** — Layout responsivo, animações e modo escuro.
+- **JavaScript ES6+** — Lógica da aplicação.
+- **MediaPipe Face Landmarker** (`@mediapipe/tasks-vision`) — Rastreamento facial em tempo real.
+- **Canvas API** — Renderização do blush utilizando gradientes, blur e modos de mesclagem.
+- **MediaDevices API** (`getUserMedia` e `enumerateDevices`) — Acesso às webcams.
+- **Firebase Hosting** — Hospedagem da aplicação e disponibilização através de um domínio público com HTTPS.
+
+O projeto foi desenvolvido inteiramente em **JavaScript puro (Vanilla JavaScript)**, sem utilização de frameworks como React, Vue ou Angular.
+
+---
+
+# 🎨 Paleta de cores
+
+| Emoji | Cor |
+|-------|----------------|
 | 🌸 | Rosa Claro |
 | 🌷 | Rosa Bebê |
 | 🌺 | Rosa Pink |
@@ -152,6 +252,22 @@ Nenhum framework (React/Vue/Angular) foi utilizado — o projeto é 100% JavaScr
 
 ---
 
-## 📄 Licença
+# ☁️ Deploy
 
-Projeto de exemplo livre para uso, estudo e adaptação.
+A aplicação foi publicada utilizando o **Firebase Hosting**, permitindo acesso através de um domínio público com HTTPS.
+
+Entre as principais vantagens da hospedagem estão:
+
+- Disponibilidade online 24 horas por dia;
+- Acesso direto pelo navegador;
+- Comunicação segura via HTTPS;
+- Compatibilidade com computadores e dispositivos móveis;
+- Não há necessidade de instalação para utilização da aplicação.
+
+---
+
+# 📄 Licença
+
+Este projeto foi desenvolvido para fins de estudo, pesquisa e demonstração de técnicas de visão computacional e realidade aumentada utilizando tecnologias web.
+
+Sua utilização, adaptação e modificação são permitidas para fins educacionais e de aprendizado.
