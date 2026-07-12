@@ -77,7 +77,7 @@ O projeto não utiliza imagens para desenhar o blush. Todo o efeito é gerado di
 Basta acessar:
 
 ```
-https://SEU-DOMINIO
+https://blushfiltro.web.app
 ```
 
 Permita o acesso à câmera quando solicitado e utilize normalmente.
